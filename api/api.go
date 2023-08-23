@@ -5,7 +5,9 @@ import (
 	"net/http"
 )
 
-func (c *gin.Context) SendMessage {
+var db = make(map[string]string)
+
+func SendMessage(c *gin.Context) {
 	user := c.Params.ByName("name")
 	db["haha"] = "wawa"
 	value, ok := db[user]
