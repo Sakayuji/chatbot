@@ -2,11 +2,28 @@ module github.com/Sakayuji/chatbot
 
 go 1.19
 
-require github.com/gin-gonic/gin v1.9.2-0.20230812142156-bb2d8cf486bd
+require (
+	github.com/chatgp/chatgpt-go v1.4.0
+	github.com/gin-gonic/gin v1.9.2-0.20230812142156-bb2d8cf486bd
+	github.com/go-resty/resty/v2 v2.7.0
+	gorm.io/driver/mysql v1.5.1
+	gorm.io/gorm v1.25.4
+)
 
 require (
-	gorm.io/driver/mysql master
-    gorm.io/gorm mater
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
+	github.com/google/uuid v1.3.0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/launchdarkly/eventsource v1.7.1 // indirect
+	github.com/tidwall/gjson v1.14.4 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
+)
+
+require (
+	//gorm.io/driver/mysql master
+	//gorm.io/gorm mater
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect

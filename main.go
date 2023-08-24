@@ -1,12 +1,11 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/Sakayuji/chatbot/api"
+	"github.com/Sakayuji/chatbot/db"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
-
-var db = make(map[string]string)
 
 func setupRouter() *gin.Engine {
 	// Disable Console Color
@@ -18,59 +17,25 @@ func setupRouter() *gin.Engine {
 		c.String(http.StatusOK, "pong")
 	})
 
-	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		db["haha"] = "wawa"
-		value, ok := db[user]
-		if ok {
-			c.JSON(http.StatusOK, gin.H{"user": user, "value": value})
-		} else {
-			c.JSON(http.StatusOK, gin.H{"user": user, "status": "no value"})
-		}
-	})
+	// Get messages
+	r.POST("/SendMessage", api.SendMessage)
 
-	// Authorized group (uses gin.BasicAuth() middleware)
-	// Same than:
-	// authorized := r.Group("/")
-	// authorized.Use(gin.BasicAuth(gin.Credentials{
-	//	  "foo":  "bar",
-	//	  "manu": "123",
-	//}))
-	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
-		"foo":  "bar", // user:foo password:bar
-		"manu": "123", // user:manu password:123
-	}))
+	// Create Template
+	r.POST("/CreateTemplate", api.CreateTemplate)
 
-	/* example curl for /admin with basicauth header
-	   Zm9vOmJhcg== is base64("foo:bar")
+	// Get messages
+	r.GET("/GetMessages", api.GetMessage)
 
-		curl -X POST \
-	  	http://localhost:8080/admin \
-	  	-H 'authorization: Basic Zm9vOmJhcg==' \
-	  	-H 'content-type: application/json' \
-	  	-d '{"value":"bar"}'
-	*/
-	authorized.POST("admin", func(c *gin.Context) {
-		user := c.MustGet(gin.AuthUserKey).(string)
-
-		// Parse JSON
-		var json struct {
-			Value string `json:"value" binding:"required"`
-		}
-
-		if c.Bind(&json) == nil {
-			db[user] = json.Value
-			c.JSON(http.StatusOK, gin.H{"status": "ok"})
-		}
-	})
+	// Get templates
+	r.GET("/GetTemplates", api.GetTemplate)
 
 	return r
 }
 
 func main() {
+	db.DB = db.GetDb()
 	r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080
 	r.Run(":8080")
-	db.DB
+
 }
